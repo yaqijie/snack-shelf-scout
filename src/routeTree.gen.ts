@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as InventoryRouteImport } from './routes/inventory'
+import { Route as FoodNewRouteImport } from './routes/food.new'
+import { Route as FoodIdEditRouteImport } from './routes/food.$id_.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InventoryRoute = InventoryRouteImport.update({
+  id: '/inventory',
+  path: '/inventory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FoodNewRoute = FoodNewRouteImport.update({
+  id: '/food/new',
+  path: '/food/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FoodIdEditRoute = FoodIdEditRouteImport.update({
+  id: '/food/$id_/edit',
+  path: '/food/$id/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/inventory': typeof InventoryRoute
+  '/food/new': typeof FoodNewRoute
+  '/food/$id/edit': typeof FoodIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/inventory': typeof InventoryRoute
+  '/food/new': typeof FoodNewRoute
+  '/food/$id/edit': typeof FoodIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/inventory': typeof InventoryRoute
+  '/food/new': typeof FoodNewRoute
+  '/food/$id_/edit': typeof FoodIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/inventory' | '/food/new' | '/food/$id/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/inventory' | '/food/new' | '/food/$id/edit'
+  id: '__root__' | '/' | '/inventory' | '/food/new' | '/food/$id_/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  InventoryRoute: typeof InventoryRoute
+  FoodNewRoute: typeof FoodNewRoute
+  FoodIdEditRoute: typeof FoodIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/inventory': {
+      id: '/inventory'
+      path: '/inventory'
+      fullPath: '/inventory'
+      preLoaderRoute: typeof InventoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/food/new': {
+      id: '/food/new'
+      path: '/food/new'
+      fullPath: '/food/new'
+      preLoaderRoute: typeof FoodNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/food/$id_/edit': {
+      id: '/food/$id_/edit'
+      path: '/food/$id/edit'
+      fullPath: '/food/$id/edit'
+      preLoaderRoute: typeof FoodIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  InventoryRoute: InventoryRoute,
+  FoodNewRoute: FoodNewRoute,
+  FoodIdEditRoute: FoodIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
