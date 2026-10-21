@@ -51,7 +51,7 @@ function Home() {
         <Quick to="/reminders" icon={<Bell />} label="看提醒" />
       </div>
 
-      <section>
+      {state.settings.inAppReminders && <section>
         <h2 className="mb-2 flex items-center gap-1.5 font-semibold"><AlertTriangle className="h-4 w-4 text-destructive" />3天内到期 / 已过期</h2>
         {soon.length === 0 ? (
           <p className="card-soft p-4 text-sm text-muted-foreground">太好了，近3天没有要到期的食物。</p>
@@ -74,7 +74,7 @@ function Home() {
             })}
           </ul>
         )}
-      </section>
+      </section>}
 
       <section>
         <div className="mb-2 flex items-center justify-between">
