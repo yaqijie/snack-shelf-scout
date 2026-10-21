@@ -10,33 +10,128 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as InventoryRouteImport } from './routes/inventory'
+import { Route as RemindersRouteImport } from './routes/reminders'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ShopRouteImport } from './routes/shop'
+import { Route as FoodIdRouteImport } from './routes/food.$id'
+import { Route as FoodNewRouteImport } from './routes/food.new'
+import { Route as FoodIdEditRouteImport } from './routes/food.$id_.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InventoryRoute = InventoryRouteImport.update({
+  id: '/inventory',
+  path: '/inventory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RemindersRoute = RemindersRouteImport.update({
+  id: '/reminders',
+  path: '/reminders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FoodIdRoute = FoodIdRouteImport.update({
+  id: '/food/$id',
+  path: '/food/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FoodNewRoute = FoodNewRouteImport.update({
+  id: '/food/new',
+  path: '/food/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FoodIdEditRoute = FoodIdEditRouteImport.update({
+  id: '/food/$id_/edit',
+  path: '/food/$id/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/inventory': typeof InventoryRoute
+  '/reminders': typeof RemindersRoute
+  '/settings': typeof SettingsRoute
+  '/shop': typeof ShopRoute
+  '/food/$id': typeof FoodIdRoute
+  '/food/new': typeof FoodNewRoute
+  '/food/$id/edit': typeof FoodIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/inventory': typeof InventoryRoute
+  '/reminders': typeof RemindersRoute
+  '/settings': typeof SettingsRoute
+  '/shop': typeof ShopRoute
+  '/food/$id': typeof FoodIdRoute
+  '/food/new': typeof FoodNewRoute
+  '/food/$id/edit': typeof FoodIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/inventory': typeof InventoryRoute
+  '/reminders': typeof RemindersRoute
+  '/settings': typeof SettingsRoute
+  '/shop': typeof ShopRoute
+  '/food/$id': typeof FoodIdRoute
+  '/food/new': typeof FoodNewRoute
+  '/food/$id_/edit': typeof FoodIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/inventory'
+    | '/reminders'
+    | '/settings'
+    | '/shop'
+    | '/food/$id'
+    | '/food/new'
+    | '/food/$id/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/inventory'
+    | '/reminders'
+    | '/settings'
+    | '/shop'
+    | '/food/$id'
+    | '/food/new'
+    | '/food/$id/edit'
+  id:
+    | '__root__'
+    | '/'
+    | '/inventory'
+    | '/reminders'
+    | '/settings'
+    | '/shop'
+    | '/food/$id'
+    | '/food/new'
+    | '/food/$id_/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  InventoryRoute: typeof InventoryRoute
+  RemindersRoute: typeof RemindersRoute
+  SettingsRoute: typeof SettingsRoute
+  ShopRoute: typeof ShopRoute
+  FoodIdRoute: typeof FoodIdRoute
+  FoodNewRoute: typeof FoodNewRoute
+  FoodIdEditRoute: typeof FoodIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +143,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/inventory': {
+      id: '/inventory'
+      path: '/inventory'
+      fullPath: '/inventory'
+      preLoaderRoute: typeof InventoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reminders': {
+      id: '/reminders'
+      path: '/reminders'
+      fullPath: '/reminders'
+      preLoaderRoute: typeof RemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/food/$id': {
+      id: '/food/$id'
+      path: '/food/$id'
+      fullPath: '/food/$id'
+      preLoaderRoute: typeof FoodIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/food/new': {
+      id: '/food/new'
+      path: '/food/new'
+      fullPath: '/food/new'
+      preLoaderRoute: typeof FoodNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/food/$id_/edit': {
+      id: '/food/$id_/edit'
+      path: '/food/$id/edit'
+      fullPath: '/food/$id/edit'
+      preLoaderRoute: typeof FoodIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  InventoryRoute: InventoryRoute,
+  RemindersRoute: RemindersRoute,
+  SettingsRoute: SettingsRoute,
+  ShopRoute: ShopRoute,
+  FoodIdRoute: FoodIdRoute,
+  FoodNewRoute: FoodNewRoute,
+  FoodIdEditRoute: FoodIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
