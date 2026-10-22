@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { Loading, PageHeader } from "@/components/snack/ui-bits";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,7 @@ const COMMON = ["花生", "坚果", "乳", "蛋", "小麦", "大豆", "鱼", "�
 function SettingsPage() {
   const { state, ready } = useStore();
   const [input, setInput] = useState("");
+  const fileInput = useRef<HTMLInputElement>(null);
   if (!ready) return <Loading />;
   const s = state.settings;
   const addAllergy = (a: string) => {
@@ -84,9 +85,53 @@ function SettingsPage() {
       </section>
 
       <section className="card-soft space-y-3 p-4">
-        <h2 className="font-semibold">数据</h2>
-        <p className="text-sm text-muted-foreground">数据仅保存在当前浏览器，换设备或清除浏览器数据会丢失。云端同步尚未启用。</p>
-        <div className="grid grid-cols-2 gap-2">
+        <h2 className="font-semibold">数据备份与恢复</h2>
+        <p className="text-sm text-muted-foreground">把当前食品、库存、购物清单和设置保存成备份文件。建议定期备份；文件会保存在你的设备上。</p>
+        <Button className="w-full" onClick={() => {
+          const backup = { app: "Snack Home", version: 1, exportedAt: new Date().toISOString(), data: state };
+          const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json;charset=utf-8" });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `snack-home-backup-${new Date().toISOString().slice(0, 10)}.json`;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          URL.revokeObjectURL(url);
+          toast.success("备份文件已开始下载");
+        }}>导出备份文件</Button>
+        <input
+          ref={fileInput}
+          type="file"
+          accept=".json,application/json"
+          className="hidden"
+          onChange={async (event) => {
+            const file = event.target.files?.[0];
+            event.target.value = "";
+            if (!file) return;
+            try {
+              const parsed = JSON.parse(await file.text());
+              const data = parsed?.app === "Snack Home" ? parsed.data : parsed;
+              const valid = data && data.version === 1 &&
+                Array.isArray(data.products) && Array.isArray(data.batches) &&
+                Array.isArray(data.cart) && data.settings &&
+                Array.isArray(data.settings.allergies) && Array.isArray(data.settings.remindDays) &&
+                typeof data.settings.inAppReminders === "boolean";
+              if (!valid) {
+                toast.error("这个文件不是有效的 Snack Home 备份文件");
+                return;
+              }
+              if (!confirm("导入备份会覆盖当前浏览器中的食品、库存、购物清单和设置。建议先导出当前数据备份。确定继续吗？")) return;
+              actions.replaceState(data);
+              toast.success("数据恢复成功");
+            } catch {
+              toast.error("读取失败，请选择有效的 JSON 备份文件");
+            }
+          }}
+        />
+        <Button variant="outline" className="w-full" onClick={() => fileInput.current?.click()}>从备份文件恢复</Button>
+        <p className="text-xs text-muted-foreground">恢复会覆盖当前数据。备份文件可以用于在另一台设备上恢复记录；目前云端同步尚未启用。</p>
+        <div className="grid grid-cols-2 gap-2 border-t pt-3">
           <Button variant="outline" onClick={() => { actions.clearDemo(); toast.success("已清除演示数据"); }}>清除演示数据</Button>
           <Button variant="outline" onClick={() => { if (confirm("恢复为演示数据？你录入的数据将被覆盖。")) actions.resetToDemo(); }}>恢复演示数据</Button>
         </div>

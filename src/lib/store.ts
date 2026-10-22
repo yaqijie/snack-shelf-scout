@@ -132,6 +132,9 @@ export const actions = {
   updateSettings(patch: Partial<Settings>) {
     set((s) => ({ ...s, settings: { ...s.settings, ...patch } }));
   },
+  replaceState(next: AppState) {
+    set(() => next);
+  },
   resetToDemo() {
     set(() => makeDemoState());
   },
